@@ -1,7 +1,5 @@
-import {bookService} from '../services/book.service.js'
-
 export default {
-    template:`
+    template: `
         <section class="review-add flex column space-around align-center">
             <form @submit.prevent="save" class="">
                 <h3>Tell us what you thought about this book</h3>
@@ -19,11 +17,11 @@ export default {
             </form>
         </section>    
     `,
-     data(){
-        return{
+    data() {
+        return {
             name: 'Books Reader',
             rate: null,
-            readAt: '2020-06-23',
+            readAt: '',
             review: null
             // readAt: (new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate()).toString()
         }
@@ -32,7 +30,8 @@ export default {
         // focusInput() {
         //     this.$refs.name.focus();
         // },
-        save(){
+        save() {
+            if (!this.review) return
             const review = {
                 writenBy: this.name,
                 rate: this.rate,
@@ -40,10 +39,15 @@ export default {
                 review: this.review
             }
             const { bookId } = this.$route.params;
-            bookService.addReview(bookId, review)
+            this.$emit('reviewAdded', { review, bookId })
         }
     },
-    mounted(){
+    mounted() {
         this.$refs.name.focus();
+    },
+    created() {
+        const todayDate = new Date().toDateString()
+        console.log(todayDate);
+
     }
 }

@@ -1,5 +1,5 @@
 import { bookService } from "../services/book.service.js";
-import reviewAdd from "../cmps/review-add.cmp.js"
+import reviewAdd from "../cmps/review-add.cmp.js";
 // import reviewDetails from "../cmps/review-details.cmp.js"
 
 export default {
@@ -18,9 +18,10 @@ export default {
       <img class="book-cover":src="book.thumbnail">      
     </div>
     <div class="reviews flex wrap">
-      <review-add></review-add>
+      <review-add @reviewAdded="saveReview" ></review-add>
       <p v-if="!reviews">No reviews yet.. Write a review and help others!</p>
-      <div v-else v-for="review in book.reviews">
+      <div v-else v-for="(review, idx) in book.reviews">
+        <button @click="remove(idx)">Delete Review</button>
         <h4>{{review.writenBy}}'s review:</h4>
         <h5>Rate:</h5> <p>{{review.rate}}</p>
         <h5>Read at:</h5> <p>{{review.readAt}}</p>
@@ -38,8 +39,16 @@ export default {
   },
   methods: {
     close() {
-      this.$router.push('/books')
+      this.$router.push("/books");
     },
+
+    remove(idx) {
+      bookService.removeReview(idx,this.book.id)
+    },
+
+    saveReview({review,bookId}){
+      bookService.addReview(bookId, review)
+    }
   },
   computed: {
     getBookAuthors() {
@@ -66,21 +75,14 @@ export default {
         if (idx === 0 && this.book.categories.length === 1)
           categoriesStr += category + ".";
         else if (idx === 0) categoriesStr += category;
-        else if (
-          idx === this.book.categories.length - 1 &&
-          this.book.categories.length > 1
-        )
-          categoriesStr += ", " + category + ".";
-        else {
-          categoriesStr += ", " + category;
-        }
+        else if (idx === this.book.categories.length - 1 && this.book.categories.length > 1) categoriesStr += ", " + category + ".";
+        else {categoriesStr += ", " + category}
       });
-      console.log(categoriesStr);
       return categoriesStr;
     },
     getLengthDesc() {
       if (this.book.pageCount < 100) return "(Light Reading)";
-      if (this.book.pageCount > 500) return "(Long Reading)";
+      else if (this.book.pageCount > 500) return "(Long Reading)";
       else if (this.book.pageCount > 200) return "(Decent Reading)";
     },
     getReleaseDesc() {
@@ -92,7 +94,7 @@ export default {
     },
     getPriceDisplay() {
       if (this.book.listPrice.amount > 150) return "red";
-      if (this.book.listPrice.amount < 20) return "green";
+      else if (this.book.listPrice.amount < 20) return "green";
     },
     getFormatedCurrency() {
       let bookPrice = this.book.listPrice.amount;
@@ -102,22 +104,20 @@ export default {
         currency: currencyCode,
       }).format(bookPrice);
     },
-    reviews(){
-      let bookReviews = this.book.reviews
-      return (!bookReviews || bookReviews.length===0) ? false : true;
-    }
+    reviews() {
+      let bookReviews = this.book.reviews;
+      return !bookReviews || bookReviews.length === 0 ? false : true;
+    },
   },
   created() {
     const { bookId } = this.$route.params;
-    bookService.getBookById(bookId)
-      .then((book) => {
-        this.book = book;
-        console.log('book details created', book);
-      });
-    
+    bookService.getBookById(bookId).then((book) => {
+      this.book = book;
+      console.log("book details created", book);
+    });
   },
-  components:{
+  components: {
     reviewAdd,
     // reviewDetails
-  }
+  },
 };

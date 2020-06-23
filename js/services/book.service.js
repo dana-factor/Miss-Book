@@ -2,6 +2,7 @@ export const bookService = {
   getBooks,
   getBookById,
   addReview,
+  removeReview
 };
 
 import { utilsService } from "./utils.service.js";
@@ -397,6 +398,8 @@ function getBookById(id) {
 }
 
 function addReview(bookId, review) {
+  // review.createdAt = Date.now()
+  // review.id = getRandomId()
   getBookById(bookId)
     .then((book) => {
       (!book.reviews) ? book.reviews = [review] : book.reviews.push(review);
@@ -405,4 +408,10 @@ function addReview(bookId, review) {
     .then((books) => {
       utilsService.storeToStorage("books", books);
     });
+}
+
+function removeReview(idx, bookId){
+  let book = gBooks.find((book) => book.id === bookId)
+  book.reviews.splice(idx, 1);
+  utilsService.storeToStorage("books", gBooks)
 }

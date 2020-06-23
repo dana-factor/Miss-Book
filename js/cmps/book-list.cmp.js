@@ -9,8 +9,6 @@ export default{
 
     `,
     methods: {
-
-  
     },
     components: {
         bookPreview
