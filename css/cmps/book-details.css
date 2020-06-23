@@ -1,0 +1,79 @@
+.book-details{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    padding: 20px;
+    max-width: 90vw;
+    max-height: 100%;
+}
+
+/* .book-details>*{ */
+    /* width: 30%;
+    height: 100%; */
+/* } */
+
+.book-details div{
+    border: 1px solid black;
+    border-radius: 2rem;
+    margin: 20px;
+    padding: 30px;
+    max-width: 50%;
+}
+
+/* MOVE TO SEP FILE */
+/* .book-details .review .review-add{ */
+    /* justify-content: stretch; */
+/* } */
+
+img.book-cover{
+    object-fit: cover;
+    opacity: 60%;
+    max-height: 200px;
+    /* height: 50vh; */
+    position: relative;
+    top: 25%;
+    /* right: 0%; */
+    /* max-width: 25%; */
+    /* margin: 0 auto; */
+}
+
+
+.book-details button.close{
+    position: absolute;
+    top: 25vh;
+    right: 10vw;
+    height: 2rem;
+    width: 2rem;
+}
+
+/* .book-details.review button{
+
+} */
+
+
+.book-details p{
+    margin-bottom: 0.5rem;
+}
+
+.book-details.red{
+    background-color: rgb(235, 96, 96);
+}
+
+.book-details.green{
+    background-color: #6baf6b;
+}
+
+.book-details h3, .book-details h4{
+    text-transform: capitalize;
+    margin-bottom: 1rem;
+}
+.book-details .sale{
+    height: 2rem;
+    display: inline-block;
+    margin-left: 20px;
+    position: absolute;
+}
+.book-details .price{
+    font-size: 1.5rem;
+    display: inline-block;
+}

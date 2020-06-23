@@ -1,0 +1,16 @@
+.book-filter{
+    text-align: center;
+    background-color:rgb(243, 227, 193);
+    padding: .8rem;
+    border: rgb(192, 174, 139) 3px solid;
+}
+
+.book-filter i{
+    font-size: 1.5rem;
+    margin-right: 5px;
+}
+
+.book-filter :not(:first-child){
+    height: 2rem;
+    width: 30%;
+}

@@ -1,0 +1,19 @@
+.book-preview {
+    width: 200px;
+    height: 300px;
+    border: 2px solid rgb(25, 12, 27);
+    padding: 10px;
+    margin: 10px;
+    text-align: center;
+    background-color: whitesmoke;
+    border-radius: 2rem;
+    cursor: pointer;
+}
+
+.book-preview img{
+    max-height: 60%;
+}
+
+.book-preview h3{
+    text-transform: capitalize;
+}
