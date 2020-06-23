@@ -6,6 +6,10 @@ export default {
   template: `
   <section v-if="book" class="book-details" :class="getPriceDisplay">
     <button class="close" @click="close">X</button>
+    <nav>
+      <router-link v-if="prevBookId" :to="'/book/' + prevBookId">Previous Book</router-link> |
+      <router-link v-if="nextBookId" :to="'/book/' + nextBookId">Next Book</router-link>
+    </nav>
     <div class="info">
       <h3 class="book-title">{{book.title}} / {{getBookAuthors}} ({{book.publishedDate}}{{getReleaseDesc}})</h3>
       <h4>{{book.subtitle}}</h4>
@@ -35,6 +39,8 @@ export default {
   data() {
     return {
       book: null,
+      prevBookId: null,
+      nextBookId: null
     };
   },
   methods: {
@@ -48,6 +54,24 @@ export default {
 
     saveReview({review,bookId}){
       bookService.addReview(bookId, review)
+    },
+    
+    loadBook() {
+      const { bookId } = this.$route.params;
+      bookService.getBookById(bookId)
+        .then(book => {
+          this.book = book;
+
+          bookService.getPrevBookId(this.book.id)
+            .then(bookId => {
+                this.prevBookId = bookId;   
+          })
+              
+          bookService.getNextBookId(this.book.id)
+              .then(bookId => {
+                  this.nextBookId = bookId;  
+          })
+        })
     }
   },
   computed: {
@@ -66,7 +90,6 @@ export default {
           authorsStr += ", " + author;
         }
       });
-      console.log(authorsStr);
       return authorsStr;
     },
     getBookCategories() {
@@ -110,14 +133,15 @@ export default {
     },
   },
   created() {
-    const { bookId } = this.$route.params;
-    bookService.getBookById(bookId).then((book) => {
-      this.book = book;
-      console.log("book details created", book);
-    });
+    this.loadBook()
   },
   components: {
     reviewAdd,
     // reviewDetails
   },
+  watch: {
+    '$route.params.bookId'() {
+        this.loadBook();
+    }
+}
 };

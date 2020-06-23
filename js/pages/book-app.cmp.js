@@ -1,12 +1,14 @@
 import { bookService } from "../services/book.service.js";
 import bookFilter from '../cmps/book-filter.cmp.js';
 import bookList from '../cmps/book-list.cmp.js';
+import bookAdd from '../cmps/book-add.cmp.js';
 // import bookDetails from '../cmps/book-details.cmp.js';
 
 export default {
     template: `
         <main class="app-main book-app">
             <book-filter @filtered="setFilter"></book-filter>
+            <book-add @searched="searchGoogleBook" @added="addGoogleBook":googleBooks = googleBooks></book-add>
             <!-- <book-details :book="currBook" @close="setCurrBook" v-if="currBook"></book-details> -->
             <book-list v-if="books" :books="booksToShow"></book-list>
             <!-- <book-list :books="booksToShow" @bookSelected="setCurrBook" v-else></book-list> -->
@@ -17,6 +19,7 @@ export default {
             books: null,
             filterBy: null,
             currBook: null,
+            googleBooks: null
         } 
     },
     computed: {
@@ -40,27 +43,32 @@ export default {
     },
     methods: {
         setFilter(filterBy){
-            console.log('filter selected');
             this.filterBy = filterBy;
-            
         },
-        // setCurrBook(book){
-        //     console.log('book selected');
-        //     this.currBook = book;
-            
-        // }
-
+        searchGoogleBook(searchStr){
+            bookService.getGoogleBooks()
+                .then(books=> {
+                    let filteredBooks = books.items.filter(book=>{
+                        return book.volumeInfo.title.toLowerCase().includes(searchStr.toLowerCase())
+                    })
+                    this.googleBooks =  filteredBooks
+                })
+        },
+        addGoogleBook(googleBook){
+            bookService.addGoogleBook(googleBook);
+        }
+   
     },
     created() {
         bookService.getBooks()
             .then(books =>{
                  this.books = books;
             })
-        
     },
     components: {
         // bookDetails,
         bookFilter,
-        bookList
+        bookList,
+        bookAdd
     }
 };

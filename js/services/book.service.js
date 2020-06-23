@@ -2,7 +2,11 @@ export const bookService = {
   getBooks,
   getBookById,
   addReview,
-  removeReview
+  removeReview,
+  getGoogleBooks,
+  addGoogleBook,
+  getNextBookId,
+  getPrevBookId
 };
 
 import { utilsService } from "./utils.service.js";
@@ -414,4 +418,51 @@ function removeReview(idx, bookId){
   let book = gBooks.find((book) => book.id === bookId)
   book.reviews.splice(idx, 1);
   utilsService.storeToStorage("books", gBooks)
+}
+
+function getGoogleBooks(){
+   let googleBooks = utilsService.loadFromStorage('googleBooks')
+   if (googleBooks) return Promise.resolve(googleBooks)
+   return axios.get('https://www.googleapis.com/books/v1/volumes?printType=books&q=effective%20javascript')
+    .then(res=>{
+      googleBooks = res.data
+      utilsService.storeToStorage('googleBooks', googleBooks)
+      return googleBooks
+    })
+}
+function addGoogleBook(googleBook) {;
+    const book = {
+        id: googleBook.id,
+        title: googleBook.volumeInfo.title,
+        subtitle: googleBook.volumeInfo.subtitle,
+        authors: googleBook.volumeInfo.authors,
+        publishedDate: googleBook.volumeInfo.publishedDate,
+        description: googleBook.volumeInfo.description,
+        pageCount: googleBook.volumeInfo.pageCount,
+        categories: googleBook.volumeInfo.categories,
+        thumbnail: googleBook.volumeInfo.imageLinks.thumbnail,
+        language: googleBook.volumeInfo.language,
+        listPrice: {
+          amount: googleBook.saleInfo.listPrice.amount,
+          currencyCode: googleBook.saleInfo.listPrice.currencyCode,
+          isOnSale: false
+        }
+    }
+    gBooks.push(book)
+    utilsService.storeToStorage("books", gBooks);
+    
+}
+
+function getNextBookId(bookId) {
+  let idx = gBooks.findIndex(book =>book.id === bookId)
+  if (idx === gBooks.length-1 ) idx = 0
+  else idx = idx + 1;
+  return Promise.resolve(gBooks[idx].id)
+}
+
+function getPrevBookId(bookId) {
+  let idx = gBooks.findIndex(book =>book.id === bookId)
+  if (idx === 0 ) idx = gBooks.length-1
+  else idx = idx - 1;
+  return Promise.resolve(gBooks[idx].id)
 }

@@ -27,7 +27,6 @@ export default{
         bookService.getBookById(bookId)
           .then((book) => {
             this.review = book;
-            console.log('book details created', book);
           });
         
       },

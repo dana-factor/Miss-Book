@@ -27,11 +27,8 @@ export default {
         }
     },
     methods: {
-        // focusInput() {
-        //     this.$refs.name.focus();
-        // },
         save() {
-            if (!this.review) return
+            // if (!this.review) return
             const review = {
                 writenBy: this.name,
                 rate: this.rate,
@@ -44,10 +41,5 @@ export default {
     },
     mounted() {
         this.$refs.name.focus();
-    },
-    created() {
-        const todayDate = new Date().toDateString()
-        console.log(todayDate);
-
     }
 }
