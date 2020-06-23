@@ -404,6 +404,5 @@ function addReview(bookId, review) {
     })
     .then((books) => {
       utilsService.storeToStorage("books", books);
-      console.log("saved");
     });
 }

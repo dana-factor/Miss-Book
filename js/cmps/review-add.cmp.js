@@ -3,7 +3,7 @@ import {bookService} from '../services/book.service.js'
 export default {
     template:`
         <section class="review-add flex column space-around align-center">
-            <form class="">
+            <form @submit.prevent="save" class="">
                 <h3>Tell us what you thought about this book</h3>
                 <input ref="name" type="text" placeholder="Full Name" v-model="name">
                 <select v-model="rate" required>
@@ -15,7 +15,7 @@ export default {
                 </select>
                 <input type="date" v-model="readAt">
                 <textarea v-model="review"></textarea>
-                <button @click="save">Save Review</button>
+                <button>Save Review</button>
             </form>
         </section>    
     `,

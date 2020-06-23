@@ -8,7 +8,7 @@ export default {
         <main class="app-main book-app">
             <book-filter @filtered="setFilter"></book-filter>
             <!-- <book-details :book="currBook" @close="setCurrBook" v-if="currBook"></book-details> -->
-            <book-list :books="booksToShow"></book-list>
+            <book-list v-if="books" :books="booksToShow"></book-list>
             <!-- <book-list :books="booksToShow" @bookSelected="setCurrBook" v-else></book-list> -->
         </main>
     `,
@@ -29,11 +29,10 @@ export default {
             });
             filteredBooks = filteredBooks.filter(book => {
                 if (!filterBy.priceRange) return true
-                if (filterBy.priceRange === "all") return book;
-                if (filterBy.priceRange === "1") return book.listPrice.amount <= 75;
-                if (filterBy.priceRange === "2") return book.listPrice.amount > 75 && book.listPrice.amount <= 150;
-                if (filterBy.priceRange === "3") return book.listPrice.amount > 150;
-                // return (filterBy.priceRange)? book.listPrice.amount === filterBy.$$$$ : true;
+                else if (filterBy.priceRange === "all") return book;
+                else if (filterBy.priceRange === "1") return book.listPrice.amount <= 75;
+                else if (filterBy.priceRange === "2") return book.listPrice.amount > 75 && book.listPrice.amount <= 150;
+                else if (filterBy.priceRange === "3") return book.listPrice.amount > 150;
             });
 
             return filteredBooks;

@@ -1,6 +1,6 @@
 .app-header {
     height: 20vh;
-    background-image: url('/img/cover.jpg');
+    background-image: url('../img/cover.jpg');
     text-align: center;
     background-position: center;
     background-size: cover;

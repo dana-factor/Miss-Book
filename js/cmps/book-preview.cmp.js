@@ -17,8 +17,4 @@ export default{
         return new Intl.NumberFormat('he-IL', {style: 'currency', currency: currencyCode}).format(bookPrice)
      },
   },
-  created () {
-    console.log('BOOK',this.book);
-    
-  }
 };
